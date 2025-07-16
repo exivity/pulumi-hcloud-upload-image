@@ -12,6 +12,7 @@ import (
 func main() {
 	p, err := infer.NewProviderBuilder().
 		WithNamespace("hcloud-upload-image").
+		WithDescription("A Pulumi provider for uploading custom images to Hetzner Cloud using https://github.com/apricote/hcloud-upload-image").
 		WithResources(
 			infer.Resource(hcloudimages.UploadedImage{}),
 		).
