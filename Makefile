@@ -11,22 +11,22 @@ install: build ## Installs the provider binary to /usr/local/bin
 	@cp bin/pulumi-resource-hcloud-upload-image /usr/local/bin/
 
 gen-sdk: build ## Generates SDKs for all supported languages
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --out sdk
 
 gen-sdk-typescript: build ## Generates TypeScript SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language typescript
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language typescript --out sdk
 
 gen-sdk-python: build ## Generates Python SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language python
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language python --out sdk
 
 gen-sdk-go: build ## Generates Go SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language go
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language go --out sdk
 
 gen-sdk-csharp: build ## Generates C# SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language csharp
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language csharp --out sdk
 
 gen-sdk-java: build ## Generates Java SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language java
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language java --out sdk
 
 schema: build ## Exports the Pulumi schema
 	@pulumi package get-schema ./bin/pulumi-resource-hcloud-upload-image
