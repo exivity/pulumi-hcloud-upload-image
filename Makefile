@@ -10,6 +10,27 @@ build: out ## Builds the provider binary
 install: build ## Installs the provider binary to /usr/local/bin
 	@cp bin/pulumi-resource-hcloud-upload-image /usr/local/bin/
 
+gen-sdk: build ## Generates SDKs for all supported languages
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image
+
+gen-sdk-typescript: build ## Generates TypeScript SDK
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language typescript
+
+gen-sdk-python: build ## Generates Python SDK
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language python
+
+gen-sdk-go: build ## Generates Go SDK
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language go
+
+gen-sdk-csharp: build ## Generates C# SDK
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language csharp
+
+gen-sdk-java: build ## Generates Java SDK
+	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language java
+
+schema: build ## Exports the Pulumi schema
+	@pulumi package get-schema ./bin/pulumi-resource-hcloud-upload-image
+
 download: ## Downloads the dependencies
 	@go mod download
 
@@ -36,7 +57,7 @@ govulncheck: ## Vulnerability detection using govulncheck
 	@go run golang.org/x/vuln/cmd/govulncheck ./...
 
 clean: ## Cleans up everything
-	@rm -rf bin out
+	@rm -rf bin out sdk
 
 help: ## Shows the help
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'
