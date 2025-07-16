@@ -26,6 +26,9 @@ jobs:
         with:
           go-version-file: ./go.mod
 
+      - name: Install Pulumi CLI
+        uses: pulumi/actions@v5
+
       - name: Downloads the dependencies
         run: make download
 
@@ -34,3 +37,9 @@ jobs:
 
       - name: Runs all tests
         run: make test
+
+      - name: Build provider
+        run: make build
+
+      - name: Generate SDKs
+        run: make gen-sdk
