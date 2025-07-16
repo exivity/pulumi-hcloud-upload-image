@@ -380,7 +380,7 @@ func (UploadedImage) Diff( //nolint:cyclop // This function is complex due to mu
 	diff := map[string]p.PropertyDiff{}
 
 	// Check if properties that require replacement have changed
-	if req.Inputs.ImageURL != req.State.ImageURL ||
+	if req.Inputs.ImageURL != req.State.ImageURL || //nolint:nestif // TODO: refactor this to avoid nested ifs
 		req.Inputs.ImageCompression != req.State.ImageCompression ||
 		req.Inputs.ImageFormat != req.State.ImageFormat ||
 		req.Inputs.ImageSize != req.State.ImageSize ||
