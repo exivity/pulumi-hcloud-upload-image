@@ -4,7 +4,7 @@
 package config
 
 import (
-	"github.com/hcloud-upload-image/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image/internal"
+	"github.com/linuxluigi/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
