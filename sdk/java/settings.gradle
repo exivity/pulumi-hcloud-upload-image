@@ -10,5 +10,5 @@ pluginManagement {
   }
 }
 
-rootProject.name = "com.yournamespace.hcloud-upload-image"
+rootProject.name = "com.hclouduploadimage.hcloud-upload-image"
 include("lib")

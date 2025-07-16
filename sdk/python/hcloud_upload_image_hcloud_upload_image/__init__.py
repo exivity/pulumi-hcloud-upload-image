@@ -10,13 +10,13 @@ from .provider import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
-    import yournamespace_hcloud_upload_image.config as __config
+    import hcloud_upload_image_hcloud_upload_image.config as __config
     config = __config
-    import yournamespace_hcloud_upload_image.hcloudimages as __hcloudimages
+    import hcloud_upload_image_hcloud_upload_image.hcloudimages as __hcloudimages
     hcloudimages = __hcloudimages
 else:
-    config = _utilities.lazy_import('yournamespace_hcloud_upload_image.config')
-    hcloudimages = _utilities.lazy_import('yournamespace_hcloud_upload_image.hcloudimages')
+    config = _utilities.lazy_import('hcloud_upload_image_hcloud_upload_image.config')
+    hcloudimages = _utilities.lazy_import('hcloud_upload_image_hcloud_upload_image.hcloudimages')
 
 _utilities.register(
     resource_modules="""
@@ -24,7 +24,7 @@ _utilities.register(
  {
   "pkg": "hcloud-upload-image",
   "mod": "hcloudimages",
-  "fqn": "yournamespace_hcloud_upload_image.hcloudimages",
+  "fqn": "hcloud_upload_image_hcloud_upload_image.hcloudimages",
   "classes": {
    "hcloud-upload-image:hcloudimages:UploadedImage": "UploadedImage"
   }
@@ -36,7 +36,7 @@ _utilities.register(
  {
   "pkg": "hcloud-upload-image",
   "token": "pulumi:providers:hcloud-upload-image",
-  "fqn": "yournamespace_hcloud_upload_image",
+  "fqn": "hcloud_upload_image_hcloud_upload_image",
   "class": "Provider"
  }
 ]

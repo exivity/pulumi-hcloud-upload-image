@@ -4,8 +4,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Pulumi Corp.</Authors>
     <Company>Pulumi Corp.</Company>
-    <Description></Description>
-    <PackageLicenseExpression></PackageLicenseExpression>
+    <Description>A Pulumi provider for uploading custom images to Hetzner Cloud using https://github.com/apricote/hcloud-upload-image</Description>
+    <PackageLicenseExpression>MIT License</PackageLicenseExpression>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>

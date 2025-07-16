@@ -11,6 +11,10 @@ import (
 
 func main() {
 	p, err := infer.NewProviderBuilder().
+		WithNamespace("hcloud-upload-image").
+		WithDescription("A Pulumi provider for uploading custom images to Hetzner Cloud using https://github.com/apricote/hcloud-upload-image").
+		WithGoImportPath("github.com/linuxluigi/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image").
+		WithLicense("MIT License").
 		WithResources(
 			infer.Resource(hcloudimages.UploadedImage{}),
 		).
@@ -22,5 +26,12 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	p.Run(context.Background(), "hcloud-upload-image", "0.1.0")
+
+	err = p.Run(context.Background(), "hcloud-upload-image", "0.1.0")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Println("Provider initialized successfully")
+	os.Exit(0)
 }

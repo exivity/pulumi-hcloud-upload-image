@@ -1,9 +1,12 @@
 [project]
-  name = "yournamespace_hcloud_upload_image"
+  name = "hcloud_upload_image_hcloud_upload_image"
+  description = "A Pulumi provider for uploading custom images to Hetzner Cloud using https://github.com/apricote/hcloud-upload-image"
   dependencies = ["parver>=0.2.1", "pulumi>=3.165.0,<4.0.0", "semver>=2.8.1", "typing-extensions>=4.11,<5; python_version < \"3.11\""]
   readme = "README.md"
   requires-python = ">=3.9"
   version = "0.1.0"
+  [project.license]
+    text = "MIT License"
 
 [build-system]
   requires = ["setuptools>=61.0"]
@@ -12,4 +15,4 @@
 [tool]
   [tool.setuptools]
     [tool.setuptools.package-data]
-      yournamespace_hcloud_upload_image = ["py.typed", "pulumi-plugin.json"]
+      hcloud_upload_image_hcloud_upload_image = ["py.typed", "pulumi-plugin.json"]

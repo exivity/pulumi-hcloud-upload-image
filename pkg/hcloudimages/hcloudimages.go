@@ -2,6 +2,7 @@ package hcloudimages
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -11,6 +12,17 @@ import (
 	"github.com/pulumi/pulumi-go-provider/infer"
 
 	"github.com/apricote/hcloud-upload-image/hcloudimages"
+)
+
+// Static error variables
+var (
+	ErrHcloudTokenRequired     = errors.New("hcloudToken is required in provider configuration")
+	ErrImageURLRequired        = errors.New("imageUrl is required")
+	ErrUnsupportedCompression  = errors.New("unsupported compression format")
+	ErrUnsupportedImageFormat  = errors.New("unsupported image format")
+	ErrUnsupportedArchitecture = errors.New("unsupported architecture")
+	ErrServerTypeNotFound      = errors.New("server type not found")
+	ErrHcloudTokenRequiredFunc = errors.New("hcloudToken is required")
 )
 
 // Config represents the provider configuration
@@ -107,7 +119,7 @@ func (state *UploadedImageState) Annotate(a infer.Annotator) {
 }
 
 // Create uploads a new image to Hetzner Cloud
-func (UploadedImage) Create(
+func (UploadedImage) Create( //nolint:cyclop,funlen // This function is complex due to multiple input validations and API interactions
 	ctx context.Context, req infer.CreateRequest[UploadedImageArgs],
 ) (infer.CreateResponse[UploadedImageState], error) {
 	name := req.Name
@@ -116,11 +128,11 @@ func (UploadedImage) Create(
 	// Get provider config
 	config := infer.GetConfig[Config](ctx)
 	if config.HcloudToken == "" {
-		return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("hcloudToken is required in provider configuration")
+		return infer.CreateResponse[UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
 	if inputs.ImageURL == nil {
-		return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("imageUrl is required")
+		return infer.CreateResponse[UploadedImageState]{}, ErrImageURLRequired
 	}
 
 	state := UploadedImageState{UploadedImageArgs: inputs}
@@ -154,7 +166,7 @@ func (UploadedImage) Create(
 		case "none", "":
 			uploadOpts.ImageCompression = hcloudimages.CompressionNone
 		default:
-			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("unsupported compression format: %s", *inputs.ImageCompression)
+			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrUnsupportedCompression, *inputs.ImageCompression)
 		}
 	}
 
@@ -166,7 +178,7 @@ func (UploadedImage) Create(
 		case "raw", "":
 			uploadOpts.ImageFormat = hcloudimages.FormatRaw
 		default:
-			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("unsupported image format: %s", *inputs.ImageFormat)
+			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrUnsupportedImageFormat, *inputs.ImageFormat)
 		}
 	}
 
@@ -182,7 +194,7 @@ func (UploadedImage) Create(
 	case "arm":
 		uploadOpts.Architecture = hcloud.ArchitectureARM
 	default:
-		return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("unsupported architecture: %s", inputs.Architecture)
+		return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrUnsupportedArchitecture, inputs.Architecture)
 	}
 
 	// Set server type if specified
@@ -192,7 +204,7 @@ func (UploadedImage) Create(
 			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("failed to get server type: %w", err)
 		}
 		if serverType == nil {
-			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("server type not found: %s", *inputs.ServerType)
+			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrServerTypeNotFound, *inputs.ServerType)
 		}
 		uploadOpts.ServerType = serverType
 	}
@@ -218,8 +230,8 @@ func (UploadedImage) Create(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -241,7 +253,7 @@ func (UploadedImage) Read(
 	// Get provider config
 	config := infer.GetConfig[Config](ctx)
 	if config.HcloudToken == "" {
-		return infer.ReadResponse[UploadedImageArgs, UploadedImageState]{}, fmt.Errorf("hcloudToken is required in provider configuration")
+		return infer.ReadResponse[UploadedImageArgs, UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client
@@ -264,8 +276,8 @@ func (UploadedImage) Read(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -288,7 +300,7 @@ func (UploadedImage) Delete(
 	// Get provider config
 	config := infer.GetConfig[Config](ctx)
 	if config.HcloudToken == "" {
-		return fmt.Errorf("hcloudToken is required in provider configuration")
+		return ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client
@@ -322,7 +334,7 @@ func (UploadedImage) Update(
 	// Get provider config
 	config := infer.GetConfig[Config](ctx)
 	if config.HcloudToken == "" {
-		return infer.UpdateResponse[UploadedImageState]{}, fmt.Errorf("hcloudToken is required in provider configuration")
+		return infer.UpdateResponse[UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client
@@ -351,8 +363,8 @@ func (UploadedImage) Update(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -362,19 +374,18 @@ func (UploadedImage) Update(
 }
 
 // Diff determines what changes are needed
-func (UploadedImage) Diff(
+func (UploadedImage) Diff( //nolint:cyclop // This function is complex due to multiple properties that can change
 	ctx context.Context, req infer.DiffRequest[UploadedImageArgs, UploadedImageState],
 ) (infer.DiffResponse, error) {
 	diff := map[string]p.PropertyDiff{}
 
 	// Check if properties that require replacement have changed
-	if req.Inputs.ImageURL != req.State.ImageURL ||
+	if req.Inputs.ImageURL != req.State.ImageURL || //nolint:nestif // TODO: refactor this to avoid nested ifs
 		req.Inputs.ImageCompression != req.State.ImageCompression ||
 		req.Inputs.ImageFormat != req.State.ImageFormat ||
 		req.Inputs.ImageSize != req.State.ImageSize ||
 		req.Inputs.Architecture != req.State.Architecture ||
 		req.Inputs.ServerType != req.State.ServerType {
-
 		// These changes require replacement
 		if req.Inputs.ImageURL != req.State.ImageURL {
 			diff["imageUrl"] = p.PropertyDiff{Kind: p.UpdateReplace}
@@ -455,7 +466,7 @@ func (CleanupFunction) Invoke(
 	ctx context.Context, req infer.FunctionRequest[CleanupFunctionArgs],
 ) (infer.FunctionResponse[CleanupFunctionResult], error) {
 	if req.Input.HcloudToken == "" {
-		return infer.FunctionResponse[CleanupFunctionResult]{}, fmt.Errorf("hcloudToken is required")
+		return infer.FunctionResponse[CleanupFunctionResult]{}, ErrHcloudTokenRequiredFunc
 	}
 
 	// Create Hetzner Cloud client

@@ -2,7 +2,7 @@
 # based on https://github.com/mvdan/github-actions-golang
 name: test
 permissions:
-  contents: read
+  contents: write
 
 on:
   pull_request:
@@ -43,3 +43,21 @@ jobs:
 
       - name: Generate SDKs
         run: make gen-sdk
+
+      - name: Check for SDK changes
+        id: verify-changed-files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push SDK updates
+        if: steps.verify-changed-files.outputs.changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add sdk/
+          git commit -m "chore: update generated SDKs" || exit 0
+          git push
