@@ -34,9 +34,3 @@ jobs:
 
       - name: Runs all tests
         run: make test
-
-      # - name: Install Cookiecutter
-      #   run: pip install cookiecutter
-
-      # - name: Cookiecutter test
-      #   run: make test-cookiecutter

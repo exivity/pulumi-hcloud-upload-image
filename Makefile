@@ -4,6 +4,12 @@ PWD = $(shell pwd)
 out:
 	@mkdir -p out/build
 
+build: out ## Builds the provider binary
+	@go build -o bin/pulumi-resource-hcloud-upload-image .
+
+install: build ## Installs the provider binary to /usr/local/bin
+	@cp bin/pulumi-resource-hcloud-upload-image /usr/local/bin/
+
 download: ## Downloads the dependencies
 	@go mod download
 
