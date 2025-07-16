@@ -8,7 +8,7 @@ import (
 	"reflect"
 
 	"errors"
-	"github.com/hcloud-upload-image/yourdisplayname/sdk/go/yourdisplayname/internal"
+	"github.com/hcloud-upload-image/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

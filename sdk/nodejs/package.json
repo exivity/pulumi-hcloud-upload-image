@@ -1,6 +1,7 @@
 {
     "name": "@hcloud-upload-image/hcloud-upload-image",
     "version": "0.1.0",
+    "license": "MIT License",
     "scripts": {
         "build": "tsc"
     },

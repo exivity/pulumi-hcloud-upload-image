@@ -5,6 +5,8 @@
   readme = "README.md"
   requires-python = ">=3.9"
   version = "0.1.0"
+  [project.license]
+    text = "MIT License"
 
 [build-system]
   requires = ["setuptools>=61.0"]
