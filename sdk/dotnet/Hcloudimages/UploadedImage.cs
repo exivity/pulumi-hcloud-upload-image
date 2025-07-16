@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Pulumi.Serialization;
 using Pulumi;
 
-namespace Yournamespace.HcloudUploadImage.Hcloudimages
+namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
 {
     /// <summary>
     /// Uploads a custom disk image to Hetzner Cloud and creates a snapshot that can be used to create servers.

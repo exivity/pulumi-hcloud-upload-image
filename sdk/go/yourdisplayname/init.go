@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/blang/semver"
+	"github.com/hcloud-upload-image/yourdisplayname/sdk/go/yourdisplayname/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/yournamespace/yourdisplayname/sdk/go/yourdisplayname/internal"
 )
 
 type pkg struct {

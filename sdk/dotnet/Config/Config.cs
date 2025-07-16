@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Immutable;
 
-namespace Yournamespace.HcloudUploadImage
+namespace HcloudUploadImage.HcloudUploadImage
 {
     public static class Config
     {

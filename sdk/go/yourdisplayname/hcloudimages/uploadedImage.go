@@ -8,8 +8,8 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/hcloud-upload-image/yourdisplayname/sdk/go/yourdisplayname/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/yournamespace/yourdisplayname/sdk/go/yourdisplayname/internal"
 )
 
 // Uploads a custom disk image to Hetzner Cloud and creates a snapshot that can be used to create servers.

@@ -11,6 +11,7 @@ import (
 
 func main() {
 	p, err := infer.NewProviderBuilder().
+		WithNamespace("hcloud-upload-image").
 		WithResources(
 			infer.Resource(hcloudimages.UploadedImage{}),
 		).

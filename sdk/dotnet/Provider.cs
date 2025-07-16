@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Pulumi.Serialization;
 using Pulumi;
 
-namespace Yournamespace.HcloudUploadImage
+namespace HcloudUploadImage.HcloudUploadImage
 {
     [HcloudUploadImageResourceType("pulumi:providers:hcloud-upload-image")]
     public partial class Provider : global::Pulumi.ProviderResource
