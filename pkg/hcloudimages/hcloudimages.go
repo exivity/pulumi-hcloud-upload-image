@@ -52,6 +52,20 @@ type UploadedImageArgs struct {
 	Labels map[string]string `pulumi:"labels,optional"`
 }
 
+func (args *UploadedImageArgs) Annotate(a infer.Annotator) {
+	a.Describe(&args.ImageURL, "The URL to download the image from. Must be publicly accessible.")
+	a.Describe(&args.ImageCompression, "The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.")
+	a.Describe(&args.ImageFormat, "The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.")
+	a.Describe(&args.ImageSize, "Optional size validation for the image in bytes.")
+	a.Describe(&args.Architecture, "The architecture of the image. Supported: 'x86', 'arm'.")
+	a.Describe(&args.ServerType, "Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.")
+	a.Describe(&args.Description, "Optional description for the resulting image.")
+	a.Describe(&args.Labels, "Labels to add to the resulting image. These can be used to filter images later.")
+
+	a.SetDefault(&args.ImageCompression, "none")
+	a.SetDefault(&args.ImageFormat, "raw")
+}
+
 // UploadedImageState represents the state of an uploaded image resource
 type UploadedImageState struct {
 	UploadedImageArgs
@@ -79,6 +93,17 @@ type UploadedImageState struct {
 
 	// Type is the type of the image
 	Type string `pulumi:"type"`
+}
+
+func (state *UploadedImageState) Annotate(a infer.Annotator) {
+	a.Describe(&state.ImageID, "The ID of the created Hetzner Cloud image.")
+	a.Describe(&state.ImageName, "The name of the created image.")
+	a.Describe(&state.Created, "The creation timestamp of the image.")
+	a.Describe(&state.DiskSize, "The disk size of the image in GB.")
+	a.Describe(&state.OSFlavor, "The OS flavor of the image.")
+	a.Describe(&state.OSVersion, "The OS version of the image.")
+	a.Describe(&state.Status, "The current status of the image.")
+	a.Describe(&state.Type, "The type of the image.")
 }
 
 // Create uploads a new image to Hetzner Cloud
@@ -390,31 +415,6 @@ func (UploadedImage) Diff(
 // Annotate provides documentation for the resource
 func (r *UploadedImage) Annotate(a infer.Annotator) {
 	a.Describe(r, "Uploads a custom disk image to Hetzner Cloud and creates a snapshot that can be used to create servers.")
-
-	// Create instances for annotation
-	var args UploadedImageArgs
-	var state UploadedImageState
-
-	a.Describe(&args.ImageURL, "The URL to download the image from. Must be publicly accessible.")
-	a.Describe(&args.ImageCompression, "The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.")
-	a.Describe(&args.ImageFormat, "The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.")
-	a.Describe(&args.ImageSize, "Optional size validation for the image in bytes.")
-	a.Describe(&args.Architecture, "The architecture of the image. Supported: 'x86', 'arm'.")
-	a.Describe(&args.ServerType, "Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.")
-	a.Describe(&args.Description, "Optional description for the resulting image.")
-	a.Describe(&args.Labels, "Labels to add to the resulting image. These can be used to filter images later.")
-
-	a.Describe(&state.ImageID, "The ID of the created Hetzner Cloud image.")
-	a.Describe(&state.ImageName, "The name of the created image.")
-	a.Describe(&state.Created, "The creation timestamp of the image.")
-	a.Describe(&state.DiskSize, "The disk size of the image in GB.")
-	a.Describe(&state.OSFlavor, "The OS flavor of the image.")
-	a.Describe(&state.OSVersion, "The OS version of the image.")
-	a.Describe(&state.Status, "The current status of the image.")
-	a.Describe(&state.Type, "The type of the image.")
-
-	a.SetDefault(&args.ImageCompression, "none")
-	a.SetDefault(&args.ImageFormat, "raw")
 }
 
 // Helper functions
