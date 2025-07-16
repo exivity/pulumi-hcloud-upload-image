@@ -3,43 +3,15 @@
 
 package com.hclouduploadimage.hclouduploadimage;
 
-import com.pulumi.core.Output;
-import com.pulumi.core.annotations.Import;
-import com.pulumi.exceptions.MissingRequiredPropertyException;
-import java.lang.String;
-import java.util.Objects;
+
 
 
 public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
 
     public static final ProviderArgs Empty = new ProviderArgs();
 
-    /**
-     * The Hetzner Cloud API token
-     * 
-     */
-    @Import(name="hcloudToken", required=true)
-    private Output<String> hcloudToken;
-
-    /**
-     * @return The Hetzner Cloud API token
-     * 
-     */
-    public Output<String> hcloudToken() {
-        return this.hcloudToken;
-    }
-
-    private ProviderArgs() {}
-
-    private ProviderArgs(ProviderArgs $) {
-        this.hcloudToken = $.hcloudToken;
-    }
-
     public static Builder builder() {
         return new Builder();
-    }
-    public static Builder builder(ProviderArgs defaults) {
-        return new Builder(defaults);
     }
 
     public static final class Builder {
@@ -48,36 +20,7 @@ public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
         public Builder() {
             $ = new ProviderArgs();
         }
-
-        public Builder(ProviderArgs defaults) {
-            $ = new ProviderArgs(Objects.requireNonNull(defaults));
-        }
-
-        /**
-         * @param hcloudToken The Hetzner Cloud API token
-         * 
-         * @return builder
-         * 
-         */
-        public Builder hcloudToken(Output<String> hcloudToken) {
-            $.hcloudToken = hcloudToken;
-            return this;
-        }
-
-        /**
-         * @param hcloudToken The Hetzner Cloud API token
-         * 
-         * @return builder
-         * 
-         */
-        public Builder hcloudToken(String hcloudToken) {
-            return hcloudToken(Output.of(hcloudToken));
-        }
-
         public ProviderArgs build() {
-            if ($.hcloudToken == null) {
-                throw new MissingRequiredPropertyException("ProviderArgs", "hcloudToken");
-            }
             return $;
         }
     }

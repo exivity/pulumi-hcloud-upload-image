@@ -13,8 +13,6 @@
         "strict": true
     },
     "files": [
-        "config/index.ts",
-        "config/vars.ts",
         "hcloudimages/index.ts",
         "hcloudimages/uploadedImage.ts",
         "index.ts",

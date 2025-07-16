@@ -24,6 +24,8 @@ type UploadedImage struct {
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The disk size of the image in GB.
 	DiskSize pulumi.IntOutput `pulumi:"diskSize"`
+	// The Hetzner Cloud API token.
+	HcloudToken pulumi.StringOutput `pulumi:"hcloudToken"`
 	// The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
 	ImageCompression pulumi.StringPtrOutput `pulumi:"imageCompression"`
 	// The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
@@ -60,12 +62,22 @@ func NewUploadedImage(ctx *pulumi.Context,
 	if args.Architecture == nil {
 		return nil, errors.New("invalid value for required argument 'Architecture'")
 	}
+	if args.HcloudToken == nil {
+		return nil, errors.New("invalid value for required argument 'HcloudToken'")
+	}
 	if args.ImageCompression == nil {
 		args.ImageCompression = pulumi.StringPtr("none")
 	}
 	if args.ImageFormat == nil {
 		args.ImageFormat = pulumi.StringPtr("raw")
 	}
+	if args.HcloudToken != nil {
+		args.HcloudToken = pulumi.ToSecret(args.HcloudToken).(pulumi.StringInput)
+	}
+	secrets := pulumi.AdditionalSecretOutputs([]string{
+		"hcloudToken",
+	})
+	opts = append(opts, secrets)
 	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource UploadedImage
 	err := ctx.RegisterResource("hcloud-upload-image:hcloudimages:UploadedImage", name, args, &resource, opts...)
@@ -103,6 +115,8 @@ type uploadedImageArgs struct {
 	Architecture string `pulumi:"architecture"`
 	// Optional description for the resulting image.
 	Description *string `pulumi:"description"`
+	// The Hetzner Cloud API token.
+	HcloudToken string `pulumi:"hcloudToken"`
 	// The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
 	ImageCompression *string `pulumi:"imageCompression"`
 	// The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
@@ -123,6 +137,8 @@ type UploadedImageArgs struct {
 	Architecture pulumi.StringInput
 	// Optional description for the resulting image.
 	Description pulumi.StringPtrInput
+	// The Hetzner Cloud API token.
+	HcloudToken pulumi.StringInput
 	// The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
 	ImageCompression pulumi.StringPtrInput
 	// The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
@@ -242,6 +258,11 @@ func (o UploadedImageOutput) Description() pulumi.StringPtrOutput {
 // The disk size of the image in GB.
 func (o UploadedImageOutput) DiskSize() pulumi.IntOutput {
 	return o.ApplyT(func(v *UploadedImage) pulumi.IntOutput { return v.DiskSize }).(pulumi.IntOutput)
+}
+
+// The Hetzner Cloud API token.
+func (o UploadedImageOutput) HcloudToken() pulumi.StringOutput {
+	return o.ApplyT(func(v *UploadedImage) pulumi.StringOutput { return v.HcloudToken }).(pulumi.StringOutput)
 }
 
 // The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.

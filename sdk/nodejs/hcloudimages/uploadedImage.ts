@@ -51,6 +51,10 @@ export class UploadedImage extends pulumi.CustomResource {
      */
     public /*out*/ readonly diskSize!: pulumi.Output<number>;
     /**
+     * The Hetzner Cloud API token.
+     */
+    public readonly hcloudToken!: pulumi.Output<string>;
+    /**
      * The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
      */
     public readonly imageCompression!: pulumi.Output<string | undefined>;
@@ -113,8 +117,12 @@ export class UploadedImage extends pulumi.CustomResource {
             if ((!args || args.architecture === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'architecture'");
             }
+            if ((!args || args.hcloudToken === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'hcloudToken'");
+            }
             resourceInputs["architecture"] = args ? args.architecture : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["hcloudToken"] = args?.hcloudToken ? pulumi.secret(args.hcloudToken) : undefined;
             resourceInputs["imageCompression"] = (args ? args.imageCompression : undefined) ?? "none";
             resourceInputs["imageFormat"] = (args ? args.imageFormat : undefined) ?? "raw";
             resourceInputs["imageSize"] = args ? args.imageSize : undefined;
@@ -134,6 +142,7 @@ export class UploadedImage extends pulumi.CustomResource {
             resourceInputs["created"] = undefined /*out*/;
             resourceInputs["description"] = undefined /*out*/;
             resourceInputs["diskSize"] = undefined /*out*/;
+            resourceInputs["hcloudToken"] = undefined /*out*/;
             resourceInputs["imageCompression"] = undefined /*out*/;
             resourceInputs["imageFormat"] = undefined /*out*/;
             resourceInputs["imageId"] = undefined /*out*/;
@@ -148,6 +157,8 @@ export class UploadedImage extends pulumi.CustomResource {
             resourceInputs["type"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
+        const secretOpts = { additionalSecretOutputs: ["hcloudToken"] };
+        opts = pulumi.mergeOptions(opts, secretOpts);
         super(UploadedImage.__pulumiType, name, resourceInputs, opts);
     }
 }
@@ -164,6 +175,10 @@ export interface UploadedImageArgs {
      * Optional description for the resulting image.
      */
     description?: pulumi.Input<string>;
+    /**
+     * The Hetzner Cloud API token.
+     */
+    hcloudToken: pulumi.Input<string>;
     /**
      * The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
      */

@@ -21,6 +21,7 @@ __all__ = ['UploadedImageArgs', 'UploadedImage']
 class UploadedImageArgs:
     def __init__(__self__, *,
                  architecture: pulumi.Input[builtins.str],
+                 hcloud_token: pulumi.Input[builtins.str],
                  description: Optional[pulumi.Input[builtins.str]] = None,
                  image_compression: Optional[pulumi.Input[builtins.str]] = None,
                  image_format: Optional[pulumi.Input[builtins.str]] = None,
@@ -31,6 +32,7 @@ class UploadedImageArgs:
         """
         The set of arguments for constructing a UploadedImage resource.
         :param pulumi.Input[builtins.str] architecture: The architecture of the image. Supported: 'x86', 'arm'.
+        :param pulumi.Input[builtins.str] hcloud_token: The Hetzner Cloud API token.
         :param pulumi.Input[builtins.str] description: Optional description for the resulting image.
         :param pulumi.Input[builtins.str] image_compression: The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
         :param pulumi.Input[builtins.str] image_format: The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
@@ -40,6 +42,7 @@ class UploadedImageArgs:
         :param pulumi.Input[builtins.str] server_type: Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
         """
         pulumi.set(__self__, "architecture", architecture)
+        pulumi.set(__self__, "hcloud_token", hcloud_token)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if image_compression is None:
@@ -70,6 +73,18 @@ class UploadedImageArgs:
     @architecture.setter
     def architecture(self, value: pulumi.Input[builtins.str]):
         pulumi.set(self, "architecture", value)
+
+    @property
+    @pulumi.getter(name="hcloudToken")
+    def hcloud_token(self) -> pulumi.Input[builtins.str]:
+        """
+        The Hetzner Cloud API token.
+        """
+        return pulumi.get(self, "hcloud_token")
+
+    @hcloud_token.setter
+    def hcloud_token(self, value: pulumi.Input[builtins.str]):
+        pulumi.set(self, "hcloud_token", value)
 
     @property
     @pulumi.getter
@@ -164,6 +179,7 @@ class UploadedImage(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  architecture: Optional[pulumi.Input[builtins.str]] = None,
                  description: Optional[pulumi.Input[builtins.str]] = None,
+                 hcloud_token: Optional[pulumi.Input[builtins.str]] = None,
                  image_compression: Optional[pulumi.Input[builtins.str]] = None,
                  image_format: Optional[pulumi.Input[builtins.str]] = None,
                  image_size: Optional[pulumi.Input[builtins.int]] = None,
@@ -178,6 +194,7 @@ class UploadedImage(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[builtins.str] architecture: The architecture of the image. Supported: 'x86', 'arm'.
         :param pulumi.Input[builtins.str] description: Optional description for the resulting image.
+        :param pulumi.Input[builtins.str] hcloud_token: The Hetzner Cloud API token.
         :param pulumi.Input[builtins.str] image_compression: The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
         :param pulumi.Input[builtins.str] image_format: The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
         :param pulumi.Input[builtins.int] image_size: Optional size validation for the image in bytes.
@@ -211,6 +228,7 @@ class UploadedImage(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  architecture: Optional[pulumi.Input[builtins.str]] = None,
                  description: Optional[pulumi.Input[builtins.str]] = None,
+                 hcloud_token: Optional[pulumi.Input[builtins.str]] = None,
                  image_compression: Optional[pulumi.Input[builtins.str]] = None,
                  image_format: Optional[pulumi.Input[builtins.str]] = None,
                  image_size: Optional[pulumi.Input[builtins.int]] = None,
@@ -230,6 +248,9 @@ class UploadedImage(pulumi.CustomResource):
                 raise TypeError("Missing required property 'architecture'")
             __props__.__dict__["architecture"] = architecture
             __props__.__dict__["description"] = description
+            if hcloud_token is None and not opts.urn:
+                raise TypeError("Missing required property 'hcloud_token'")
+            __props__.__dict__["hcloud_token"] = None if hcloud_token is None else pulumi.Output.secret(hcloud_token)
             if image_compression is None:
                 image_compression = 'none'
             __props__.__dict__["image_compression"] = image_compression
@@ -248,6 +269,8 @@ class UploadedImage(pulumi.CustomResource):
             __props__.__dict__["os_version"] = None
             __props__.__dict__["status"] = None
             __props__.__dict__["type"] = None
+        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["hcloudToken"])
+        opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(UploadedImage, __self__).__init__(
             'hcloud-upload-image:hcloudimages:UploadedImage',
             resource_name,
@@ -274,6 +297,7 @@ class UploadedImage(pulumi.CustomResource):
         __props__.__dict__["created"] = None
         __props__.__dict__["description"] = None
         __props__.__dict__["disk_size"] = None
+        __props__.__dict__["hcloud_token"] = None
         __props__.__dict__["image_compression"] = None
         __props__.__dict__["image_format"] = None
         __props__.__dict__["image_id"] = None
@@ -319,6 +343,14 @@ class UploadedImage(pulumi.CustomResource):
         The disk size of the image in GB.
         """
         return pulumi.get(self, "disk_size")
+
+    @property
+    @pulumi.getter(name="hcloudToken")
+    def hcloud_token(self) -> pulumi.Output[builtins.str]:
+        """
+        The Hetzner Cloud API token.
+        """
+        return pulumi.get(self, "hcloud_token")
 
     @property
     @pulumi.getter(name="imageCompression")

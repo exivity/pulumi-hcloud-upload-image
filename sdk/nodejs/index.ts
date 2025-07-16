@@ -12,11 +12,9 @@ utilities.lazyLoad(exports, ["Provider"], () => require("./provider"));
 
 
 // Export sub-modules:
-import * as config from "./config";
 import * as hcloudimages from "./hcloudimages";
 
 export {
-    config,
     hcloudimages,
 };
 pulumi.runtime.registerResourcePackage("hcloud-upload-image", {

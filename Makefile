@@ -8,11 +8,12 @@ sdk-dir:
 	@rm -rf sdk
 	@mkdir -p sdk
 
-build: out ## Builds the provider binary
+build: clean out ## Builds the provider binary
 	@go build -o bin/pulumi-resource-hcloud-upload-image .
 
-install: build ## Installs the provider binary to /usr/local/bin
-	@cp bin/pulumi-resource-hcloud-upload-image /usr/local/bin/
+install-plugin: build ## Installs the plugin locally for Pulumi
+	@pulumi plugin rm resource hcloud-upload-image --yes
+	@pulumi plugin install resource hcloud-upload-image v0.1.0 --file ./bin/pulumi-resource-hcloud-upload-image
 
 gen-sdk: build sdk-dir ## Generates SDKs for all supported languages
 	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --out sdk
@@ -54,7 +55,7 @@ govulncheck: ## Vulnerability detection using govulncheck
 	@go run golang.org/x/vuln/cmd/govulncheck ./...
 
 clean: ## Cleans up everything
-	@rm -rf bin out sdk
+	@rm -rf bin out
 
 help: ## Shows the help
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'

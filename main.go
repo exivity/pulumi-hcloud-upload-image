@@ -18,9 +18,6 @@ func main() {
 		WithResources(
 			infer.Resource(hcloudimages.UploadedImage{}),
 		).
-		WithConfig(
-			infer.Config(&hcloudimages.Config{}),
-		).
 		Build()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

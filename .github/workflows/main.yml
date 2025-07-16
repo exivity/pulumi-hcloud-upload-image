@@ -27,7 +27,7 @@ jobs:
           go-version-file: ./go.mod
 
       - name: Install Pulumi CLI
-        uses: pulumi/actions@v5
+        run: curl -fsSL https://get.pulumi.com | sh
 
       - name: Downloads the dependencies
         run: make download

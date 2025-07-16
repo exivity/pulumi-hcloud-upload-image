@@ -19,10 +19,6 @@ export class Provider extends pulumi.ProviderResource {
         return obj['__pulumiType'] === "pulumi:providers:" + Provider.__pulumiType;
     }
 
-    /**
-     * The Hetzner Cloud API token
-     */
-    public readonly hcloudToken!: pulumi.Output<string>;
 
     /**
      * Create a Provider resource with the given unique name, arguments, and options.
@@ -31,18 +27,12 @@ export class Provider extends pulumi.ProviderResource {
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: ProviderArgs, opts?: pulumi.ResourceOptions) {
+    constructor(name: string, args?: ProviderArgs, opts?: pulumi.ResourceOptions) {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         {
-            if ((!args || args.hcloudToken === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'hcloudToken'");
-            }
-            resourceInputs["hcloudToken"] = args?.hcloudToken ? pulumi.secret(args.hcloudToken) : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
-        const secretOpts = { additionalSecretOutputs: ["hcloudToken"] };
-        opts = pulumi.mergeOptions(opts, secretOpts);
         super(Provider.__pulumiType, name, resourceInputs, opts);
     }
 }
@@ -51,8 +41,4 @@ export class Provider extends pulumi.ProviderResource {
  * The set of arguments for constructing a Provider resource.
  */
 export interface ProviderArgs {
-    /**
-     * The Hetzner Cloud API token
-     */
-    hcloudToken: pulumi.Input<string>;
 }

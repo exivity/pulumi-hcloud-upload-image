@@ -41,6 +41,12 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
         public Output<int> DiskSize { get; private set; } = null!;
 
         /// <summary>
+        /// The Hetzner Cloud API token.
+        /// </summary>
+        [Output("hcloudToken")]
+        public Output<string> HcloudToken { get; private set; } = null!;
+
+        /// <summary>
         /// The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
         /// </summary>
         [Output("imageCompression")]
@@ -135,6 +141,10 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
+                AdditionalSecretOutputs =
+                {
+                    "hcloudToken",
+                },
             };
             var merged = CustomResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.
@@ -168,6 +178,22 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
         /// </summary>
         [Input("description")]
         public Input<string>? Description { get; set; }
+
+        [Input("hcloudToken", required: true)]
+        private Input<string>? _hcloudToken;
+
+        /// <summary>
+        /// The Hetzner Cloud API token.
+        /// </summary>
+        public Input<string>? HcloudToken
+        {
+            get => _hcloudToken;
+            set
+            {
+                var emptySecret = Output.CreateSecret(0);
+                _hcloudToken = Output.Tuple<Input<string>?, int>(value, emptySecret).Apply(t => t.Item1);
+            }
+        }
 
         /// <summary>
         /// The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.

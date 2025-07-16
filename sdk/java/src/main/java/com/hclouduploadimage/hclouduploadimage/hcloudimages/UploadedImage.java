@@ -11,6 +11,7 @@ import com.pulumi.core.annotations.ResourceType;
 import com.pulumi.core.internal.Codegen;
 import java.lang.Integer;
 import java.lang.String;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Nullable;
@@ -76,6 +77,20 @@ public class UploadedImage extends com.pulumi.resources.CustomResource {
      */
     public Output<Integer> diskSize() {
         return this.diskSize;
+    }
+    /**
+     * The Hetzner Cloud API token.
+     * 
+     */
+    @Export(name="hcloudToken", refs={String.class}, tree="[0]")
+    private Output<String> hcloudToken;
+
+    /**
+     * @return The Hetzner Cloud API token.
+     * 
+     */
+    public Output<String> hcloudToken() {
+        return this.hcloudToken;
     }
     /**
      * The compression format of the image. Supported: &#39;none&#39;, &#39;bz2&#39;, &#39;xz&#39;. Defaults to &#39;none&#39;.
@@ -285,6 +300,9 @@ public class UploadedImage extends com.pulumi.resources.CustomResource {
     private static com.pulumi.resources.CustomResourceOptions makeResourceOptions(@Nullable com.pulumi.resources.CustomResourceOptions options, @Nullable Output<java.lang.String> id) {
         var defaultOptions = com.pulumi.resources.CustomResourceOptions.builder()
             .version(Utilities.getVersion())
+            .additionalSecretOutputs(List.of(
+                "hcloudToken"
+            ))
             .build();
         return com.pulumi.resources.CustomResourceOptions.merge(defaultOptions, options, id);
     }

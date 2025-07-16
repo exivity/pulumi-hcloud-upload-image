@@ -19,25 +19,11 @@ __all__ = ['ProviderArgs', 'Provider']
 
 @pulumi.input_type
 class ProviderArgs:
-    def __init__(__self__, *,
-                 hcloud_token: pulumi.Input[builtins.str]):
+    def __init__(__self__):
         """
         The set of arguments for constructing a Provider resource.
-        :param pulumi.Input[builtins.str] hcloud_token: The Hetzner Cloud API token
         """
-        pulumi.set(__self__, "hcloud_token", hcloud_token)
-
-    @property
-    @pulumi.getter(name="hcloudToken")
-    def hcloud_token(self) -> pulumi.Input[builtins.str]:
-        """
-        The Hetzner Cloud API token
-        """
-        return pulumi.get(self, "hcloud_token")
-
-    @hcloud_token.setter
-    def hcloud_token(self, value: pulumi.Input[builtins.str]):
-        pulumi.set(self, "hcloud_token", value)
+        pass
 
 
 @pulumi.type_token("pulumi:providers:hcloud-upload-image")
@@ -46,19 +32,17 @@ class Provider(pulumi.ProviderResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 hcloud_token: Optional[pulumi.Input[builtins.str]] = None,
                  __props__=None):
         """
         Create a Hcloud-upload-image resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[builtins.str] hcloud_token: The Hetzner Cloud API token
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: ProviderArgs,
+                 args: Optional[ProviderArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Create a Hcloud-upload-image resource with the given unique name, props, and options.
@@ -77,7 +61,6 @@ class Provider(pulumi.ProviderResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 hcloud_token: Optional[pulumi.Input[builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -87,22 +70,9 @@ class Provider(pulumi.ProviderResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = ProviderArgs.__new__(ProviderArgs)
 
-            if hcloud_token is None and not opts.urn:
-                raise TypeError("Missing required property 'hcloud_token'")
-            __props__.__dict__["hcloud_token"] = None if hcloud_token is None else pulumi.Output.secret(hcloud_token)
-        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["hcloudToken"])
-        opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(Provider, __self__).__init__(
             'hcloud-upload-image',
             resource_name,
             __props__,
             opts)
-
-    @property
-    @pulumi.getter(name="hcloudToken")
-    def hcloud_token(self) -> pulumi.Output[builtins.str]:
-        """
-        The Hetzner Cloud API token
-        """
-        return pulumi.get(self, "hcloud_token")
 

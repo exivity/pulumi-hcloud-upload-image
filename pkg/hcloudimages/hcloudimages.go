@@ -16,29 +16,22 @@ import (
 
 // Static error variables
 var (
-	ErrHcloudTokenRequired     = errors.New("hcloudToken is required in provider configuration")
+	ErrHcloudTokenRequired     = errors.New("hcloudToken is required")
 	ErrImageURLRequired        = errors.New("imageUrl is required")
 	ErrUnsupportedCompression  = errors.New("unsupported compression format")
 	ErrUnsupportedImageFormat  = errors.New("unsupported image format")
 	ErrUnsupportedArchitecture = errors.New("unsupported architecture")
 	ErrServerTypeNotFound      = errors.New("server type not found")
-	ErrHcloudTokenRequiredFunc = errors.New("hcloudToken is required")
 )
-
-// Config represents the provider configuration
-type Config struct {
-	HcloudToken string `pulumi:"hcloudToken" provider:"secret"`
-}
-
-func (c *Config) Annotate(a infer.Annotator) {
-	a.Describe(&c.HcloudToken, "The Hetzner Cloud API token")
-}
 
 // UploadedImage represents a Pulumi resource for uploading custom images to Hetzner Cloud
 type UploadedImage struct{}
 
 // UploadedImageArgs defines the input arguments for uploading an image
 type UploadedImageArgs struct {
+	// HcloudToken is the Hetzner Cloud API token
+	HcloudToken string `pulumi:"hcloudToken" provider:"secret"`
+
 	// ImageURL is the URL to download the image from (mutually exclusive with ImageReader)
 	ImageURL *string `pulumi:"imageUrl,optional"`
 
@@ -65,6 +58,7 @@ type UploadedImageArgs struct {
 }
 
 func (args *UploadedImageArgs) Annotate(a infer.Annotator) {
+	a.Describe(&args.HcloudToken, "The Hetzner Cloud API token.")
 	a.Describe(&args.ImageURL, "The URL to download the image from. Must be publicly accessible.")
 	a.Describe(&args.ImageCompression, "The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.")
 	a.Describe(&args.ImageFormat, "The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.")
@@ -119,15 +113,14 @@ func (state *UploadedImageState) Annotate(a infer.Annotator) {
 }
 
 // Create uploads a new image to Hetzner Cloud
-func (UploadedImage) Create( //nolint:cyclop,funlen // This function is complex due to multiple input validations and API interactions
+func (UploadedImage) Create( //nolint:cyclop,funlen // TODO: refactor this function
 	ctx context.Context, req infer.CreateRequest[UploadedImageArgs],
 ) (infer.CreateResponse[UploadedImageState], error) {
 	name := req.Name
 	inputs := req.Inputs
 
-	// Get provider config
-	config := infer.GetConfig[Config](ctx)
-	if config.HcloudToken == "" {
+	// Validate required inputs
+	if inputs.HcloudToken == "" {
 		return infer.CreateResponse[UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
@@ -142,7 +135,7 @@ func (UploadedImage) Create( //nolint:cyclop,funlen // This function is complex 
 	}
 
 	// Create Hetzner Cloud client
-	hcloudClient := hcloud.NewClient(hcloud.WithToken(config.HcloudToken))
+	hcloudClient := hcloud.NewClient(hcloud.WithToken(inputs.HcloudToken))
 	client := hcloudimages.NewClient(hcloudClient)
 
 	// Parse image URL
@@ -250,14 +243,13 @@ func (UploadedImage) Read(
 		return infer.ReadResponse[UploadedImageArgs, UploadedImageState]{}, fmt.Errorf("invalid image ID: %w", err)
 	}
 
-	// Get provider config
-	config := infer.GetConfig[Config](ctx)
-	if config.HcloudToken == "" {
+	// Validate required inputs
+	if req.Inputs.HcloudToken == "" {
 		return infer.ReadResponse[UploadedImageArgs, UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client
-	hcloudClient := hcloud.NewClient(hcloud.WithToken(config.HcloudToken))
+	hcloudClient := hcloud.NewClient(hcloud.WithToken(req.Inputs.HcloudToken))
 
 	// Get the image
 	image, _, err := hcloudClient.Image.GetByID(ctx, imageID)
@@ -288,35 +280,26 @@ func (UploadedImage) Read(
 	}, nil
 }
 
-// Delete removes the image from Hetzner Cloud
-func (UploadedImage) Delete(
-	ctx context.Context, req infer.DeleteRequest[UploadedImageState],
-) error {
+// Delete removes the image from Hetzner Cloud.
+func (UploadedImage) Delete(ctx context.Context, req infer.DeleteRequest[UploadedImageState]) (infer.DeleteResponse, error) {
+	// Create Hetzner Cloud client
+	hcloudClient := hcloud.NewClient(hcloud.WithToken(req.State.HcloudToken))
+
 	imageID, err := strconv.ParseInt(req.ID, 10, 64)
 	if err != nil {
-		return fmt.Errorf("invalid image ID: %w", err)
+		return infer.DeleteResponse{}, fmt.Errorf("invalid image ID: %w", err)
 	}
 
-	// Get provider config
-	config := infer.GetConfig[Config](ctx)
-	if config.HcloudToken == "" {
-		return ErrHcloudTokenRequired
-	}
-
-	// Create Hetzner Cloud client
-	hcloudClient := hcloud.NewClient(hcloud.WithToken(config.HcloudToken))
-
-	// Delete the image
-	_, err = hcloudClient.Image.Delete(ctx, &hcloud.Image{ID: imageID})
+	image := &hcloud.Image{ID: imageID}
+	_, err = hcloudClient.Image.Delete(ctx, image)
 	if err != nil {
-		// Check if image is already deleted
 		if hcloud.IsError(err, hcloud.ErrorCodeNotFound) {
-			return nil
+			return infer.DeleteResponse{}, nil // Image already deleted
 		}
-		return fmt.Errorf("failed to delete image: %w", err)
+		return infer.DeleteResponse{}, fmt.Errorf("failed to delete image: %w", err)
 	}
 
-	return nil
+	return infer.DeleteResponse{}, nil
 }
 
 // Update handles updates to the image resource
@@ -331,14 +314,13 @@ func (UploadedImage) Update(
 		return infer.UpdateResponse[UploadedImageState]{}, fmt.Errorf("invalid image ID: %w", err)
 	}
 
-	// Get provider config
-	config := infer.GetConfig[Config](ctx)
-	if config.HcloudToken == "" {
+	// Validate required inputs
+	if req.Inputs.HcloudToken == "" {
 		return infer.UpdateResponse[UploadedImageState]{}, ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client
-	hcloudClient := hcloud.NewClient(hcloud.WithToken(config.HcloudToken))
+	hcloudClient := hcloud.NewClient(hcloud.WithToken(req.Inputs.HcloudToken))
 
 	// Update the image with new labels and description
 	updateOpts := hcloud.ImageUpdateOpts{}
@@ -374,37 +356,35 @@ func (UploadedImage) Update(
 }
 
 // Diff determines what changes are needed
-func (UploadedImage) Diff( //nolint:cyclop // This function is complex due to multiple properties that can change
+func (UploadedImage) Diff(
 	ctx context.Context, req infer.DiffRequest[UploadedImageArgs, UploadedImageState],
 ) (infer.DiffResponse, error) {
 	diff := map[string]p.PropertyDiff{}
 
 	// Check if properties that require replacement have changed
-	if req.Inputs.ImageURL != req.State.ImageURL || //nolint:nestif // TODO: refactor this to avoid nested ifs
-		req.Inputs.ImageCompression != req.State.ImageCompression ||
-		req.Inputs.ImageFormat != req.State.ImageFormat ||
-		req.Inputs.ImageSize != req.State.ImageSize ||
-		req.Inputs.Architecture != req.State.Architecture ||
-		req.Inputs.ServerType != req.State.ServerType {
-		// These changes require replacement
-		if req.Inputs.ImageURL != req.State.ImageURL {
-			diff["imageUrl"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
-		if req.Inputs.ImageCompression != req.State.ImageCompression {
-			diff["imageCompression"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
-		if req.Inputs.ImageFormat != req.State.ImageFormat {
-			diff["imageFormat"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
-		if req.Inputs.ImageSize != req.State.ImageSize {
-			diff["imageSize"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
-		if req.Inputs.Architecture != req.State.Architecture {
-			diff["architecture"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
-		if req.Inputs.ServerType != req.State.ServerType {
-			diff["serverType"] = p.PropertyDiff{Kind: p.UpdateReplace}
-		}
+	// Only imageUrl and architecture changes require replacement
+	if stringPtrNotEqual(req.Inputs.ImageURL, req.State.ImageURL) {
+		diff["imageUrl"] = p.PropertyDiff{Kind: p.UpdateReplace}
+	}
+	if req.Inputs.Architecture != req.State.Architecture {
+		diff["architecture"] = p.PropertyDiff{Kind: p.UpdateReplace}
+	}
+
+	// Other properties can be updated in place
+	if req.Inputs.HcloudToken != req.State.HcloudToken {
+		diff["hcloudToken"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if stringPtrNotEqual(req.Inputs.ImageCompression, req.State.ImageCompression) {
+		diff["imageCompression"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if stringPtrNotEqual(req.Inputs.ImageFormat, req.State.ImageFormat) {
+		diff["imageFormat"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if req.Inputs.ImageSize != req.State.ImageSize {
+		diff["imageSize"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if stringPtrNotEqual(req.Inputs.ServerType, req.State.ServerType) {
+		diff["serverType"] = p.PropertyDiff{Kind: p.Update}
 	}
 
 	// Labels and description can be updated in place
@@ -417,7 +397,7 @@ func (UploadedImage) Diff( //nolint:cyclop // This function is complex due to mu
 	}
 
 	return infer.DiffResponse{
-		DeleteBeforeReplace: true,
+		DeleteBeforeReplace: false,
 		HasChanges:          len(diff) > 0,
 		DetailedDiff:        diff,
 	}, nil
@@ -466,7 +446,7 @@ func (CleanupFunction) Invoke(
 	ctx context.Context, req infer.FunctionRequest[CleanupFunctionArgs],
 ) (infer.FunctionResponse[CleanupFunctionResult], error) {
 	if req.Input.HcloudToken == "" {
-		return infer.FunctionResponse[CleanupFunctionResult]{}, ErrHcloudTokenRequiredFunc
+		return infer.FunctionResponse[CleanupFunctionResult]{}, ErrHcloudTokenRequired
 	}
 
 	// Create Hetzner Cloud client

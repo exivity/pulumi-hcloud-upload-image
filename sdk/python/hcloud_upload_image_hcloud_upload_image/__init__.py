@@ -10,12 +10,9 @@ from .provider import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
-    import hcloud_upload_image_hcloud_upload_image.config as __config
-    config = __config
     import hcloud_upload_image_hcloud_upload_image.hcloudimages as __hcloudimages
     hcloudimages = __hcloudimages
 else:
-    config = _utilities.lazy_import('hcloud_upload_image_hcloud_upload_image.config')
     hcloudimages = _utilities.lazy_import('hcloud_upload_image_hcloud_upload_image.hcloudimages')
 
 _utilities.register(

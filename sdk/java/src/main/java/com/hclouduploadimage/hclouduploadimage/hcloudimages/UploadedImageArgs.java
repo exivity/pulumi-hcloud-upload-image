@@ -50,6 +50,21 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
     }
 
     /**
+     * The Hetzner Cloud API token.
+     * 
+     */
+    @Import(name="hcloudToken", required=true)
+    private Output<String> hcloudToken;
+
+    /**
+     * @return The Hetzner Cloud API token.
+     * 
+     */
+    public Output<String> hcloudToken() {
+        return this.hcloudToken;
+    }
+
+    /**
      * The compression format of the image. Supported: &#39;none&#39;, &#39;bz2&#39;, &#39;xz&#39;. Defaults to &#39;none&#39;.
      * 
      */
@@ -144,6 +159,7 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
     private UploadedImageArgs(UploadedImageArgs $) {
         this.architecture = $.architecture;
         this.description = $.description;
+        this.hcloudToken = $.hcloudToken;
         this.imageCompression = $.imageCompression;
         this.imageFormat = $.imageFormat;
         this.imageSize = $.imageSize;
@@ -210,6 +226,27 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
          */
         public Builder description(String description) {
             return description(Output.of(description));
+        }
+
+        /**
+         * @param hcloudToken The Hetzner Cloud API token.
+         * 
+         * @return builder
+         * 
+         */
+        public Builder hcloudToken(Output<String> hcloudToken) {
+            $.hcloudToken = hcloudToken;
+            return this;
+        }
+
+        /**
+         * @param hcloudToken The Hetzner Cloud API token.
+         * 
+         * @return builder
+         * 
+         */
+        public Builder hcloudToken(String hcloudToken) {
+            return hcloudToken(Output.of(hcloudToken));
         }
 
         /**
@@ -341,6 +378,9 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
         public UploadedImageArgs build() {
             if ($.architecture == null) {
                 throw new MissingRequiredPropertyException("UploadedImageArgs", "architecture");
+            }
+            if ($.hcloudToken == null) {
+                throw new MissingRequiredPropertyException("UploadedImageArgs", "hcloudToken");
             }
             $.imageCompression = Codegen.stringProp("imageCompression").output().arg($.imageCompression).def("none").getNullable();
             $.imageFormat = Codegen.stringProp("imageFormat").output().arg($.imageFormat).def("raw").getNullable();
