@@ -26,5 +26,12 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	p.Run(context.Background(), "hcloud-upload-image", "0.1.0")
+
+	err = p.Run(context.Background(), "hcloud-upload-image", "0.1.0")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Println("Provider initialized successfully")
+	os.Exit(0)
 }

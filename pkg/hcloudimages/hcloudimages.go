@@ -119,7 +119,7 @@ func (state *UploadedImageState) Annotate(a infer.Annotator) {
 }
 
 // Create uploads a new image to Hetzner Cloud
-func (UploadedImage) Create(
+func (UploadedImage) Create( //nolint:cyclop,funlen // This function is complex due to multiple input validations and API interactions
 	ctx context.Context, req infer.CreateRequest[UploadedImageArgs],
 ) (infer.CreateResponse[UploadedImageState], error) {
 	name := req.Name
@@ -230,8 +230,8 @@ func (UploadedImage) Create(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -276,8 +276,8 @@ func (UploadedImage) Read(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -363,8 +363,8 @@ func (UploadedImage) Update(
 	state.ImageName = image.Name
 	state.Created = image.Created.String()
 	state.DiskSize = int(image.DiskSize)
-	state.OSFlavor = string(image.OSFlavor)
-	state.OSVersion = string(image.OSVersion)
+	state.OSFlavor = image.OSFlavor
+	state.OSVersion = image.OSVersion
 	state.Status = string(image.Status)
 	state.Type = string(image.Type)
 
@@ -374,7 +374,7 @@ func (UploadedImage) Update(
 }
 
 // Diff determines what changes are needed
-func (UploadedImage) Diff(
+func (UploadedImage) Diff( //nolint:cyclop // This function is complex due to multiple properties that can change
 	ctx context.Context, req infer.DiffRequest[UploadedImageArgs, UploadedImageState],
 ) (infer.DiffResponse, error) {
 	diff := map[string]p.PropertyDiff{}
@@ -386,7 +386,6 @@ func (UploadedImage) Diff(
 		req.Inputs.ImageSize != req.State.ImageSize ||
 		req.Inputs.Architecture != req.State.Architecture ||
 		req.Inputs.ServerType != req.State.ServerType {
-
 		// These changes require replacement
 		if req.Inputs.ImageURL != req.State.ImageURL {
 			diff["imageUrl"] = p.PropertyDiff{Kind: p.UpdateReplace}
