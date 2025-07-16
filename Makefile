@@ -4,13 +4,17 @@ PWD = $(shell pwd)
 out:
 	@mkdir -p out/build
 
+sdk-dir:
+	@rm -rf sdk
+	@mkdir -p sdk
+
 build: out ## Builds the provider binary
 	@go build -o bin/pulumi-resource-hcloud-upload-image .
 
 install: build ## Installs the provider binary to /usr/local/bin
 	@cp bin/pulumi-resource-hcloud-upload-image /usr/local/bin/
 
-gen-sdk: build ## Generates SDKs for all supported languages
+gen-sdk: build sdk-dir ## Generates SDKs for all supported languages
 	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --out sdk
 
 gen-sdk-typescript: build ## Generates TypeScript SDK
