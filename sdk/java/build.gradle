@@ -12,7 +12,7 @@ group = "com.hclouduploadimage."
 
 def resolvedVersion = System.getenv("PACKAGE_VERSION") ?:
     (project.version == "unspecified"
-         ? "0.1.0"
+         ? "0.0.1"
          : project.version)
 
 def signingKey = System.getenv("SIGNING_KEY")
@@ -69,6 +69,7 @@ def genPulumiResources = tasks.register('genPulumiResources') {
         builder {
             resource true
             name "hcloud-upload-image"
+            server "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image"
             version resolvedVersion
         }
         def infoJson = builder.toPrettyString()

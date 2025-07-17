@@ -9,32 +9,34 @@ sdk-dir:
 	@mkdir -p sdk
 
 build: clean out ## Builds the provider binary
-	@go build -o bin/pulumi-resource-hcloud-upload-image .
+	@VERSION=$$(cat version 2>/dev/null || echo "dev"); \
+	go build -ldflags "-X main.version=$$VERSION" -o out/build/pulumi-resource-hcloud-upload-image .
 
 install-plugin: build ## Installs the plugin locally for Pulumi
-	@pulumi plugin rm resource hcloud-upload-image --yes
-	@pulumi plugin install resource hcloud-upload-image v0.1.0 --file ./bin/pulumi-resource-hcloud-upload-image
+	@VERSION=$$(cat version 2>/dev/null || echo "dev"); \
+	pulumi plugin rm resource hcloud-upload-image --yes; \
+	pulumi plugin install resource hcloud-upload-image $$VERSION --file ./out/build/pulumi-resource-hcloud-upload-image
 
 gen-sdk: build sdk-dir ## Generates SDKs for all supported languages
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --out sdk
 
 gen-sdk-typescript: build ## Generates TypeScript SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language typescript --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --language typescript --out sdk
 
 gen-sdk-python: build ## Generates Python SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language python --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --language python --out sdk
 
 gen-sdk-go: build ## Generates Go SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language go --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --language go --out sdk
 
 gen-sdk-csharp: build ## Generates C# SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language csharp --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --language csharp --out sdk
 
 gen-sdk-java: build ## Generates Java SDK
-	@pulumi package gen-sdk ./bin/pulumi-resource-hcloud-upload-image --language java --out sdk
+	@pulumi package gen-sdk ./out/build/pulumi-resource-hcloud-upload-image --language java --out sdk
 
 schema: build ## Exports the Pulumi schema
-	@pulumi package get-schema ./bin/pulumi-resource-hcloud-upload-image
+	@pulumi package get-schema ./out/build/pulumi-resource-hcloud-upload-image
 
 download: ## Downloads the dependencies
 	@go mod download
@@ -53,6 +55,17 @@ test: ## Runs all tests
 
 govulncheck: ## Vulnerability detection using govulncheck
 	@go run golang.org/x/vuln/cmd/govulncheck ./...
+
+version: ## Shows the current version
+	@cat version 2>/dev/null || echo "dev"
+
+set-version: ## Sets a new version (usage: make set-version VERSION=v1.0.0)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "Error: VERSION is required. Usage: make set-version VERSION=v1.0.0"; \
+		exit 1; \
+	fi
+	@echo "$(VERSION)" > version
+	@echo "Version set to $(VERSION)"
 
 clean: ## Cleans up everything
 	@rm -rf bin out

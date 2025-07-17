@@ -325,7 +325,7 @@ def deprecated(message: str) -> typing.Callable[[C], C]:
     return decorator
 
 def get_plugin_download_url():
-	return None
+	return "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image"
 
 def get_version():
      return _version_str

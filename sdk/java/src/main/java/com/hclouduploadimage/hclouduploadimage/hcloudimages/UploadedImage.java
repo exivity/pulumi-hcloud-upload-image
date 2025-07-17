@@ -300,6 +300,7 @@ public class UploadedImage extends com.pulumi.resources.CustomResource {
     private static com.pulumi.resources.CustomResourceOptions makeResourceOptions(@Nullable com.pulumi.resources.CustomResourceOptions options, @Nullable Output<java.lang.String> id) {
         var defaultOptions = com.pulumi.resources.CustomResourceOptions.builder()
             .version(Utilities.getVersion())
+            .pluginDownloadURL("https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image")
             .additionalSecretOutputs(List.of(
                 "hcloudToken"
             ))

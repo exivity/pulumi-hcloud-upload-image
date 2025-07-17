@@ -1,6 +1,6 @@
 {
     "name": "@hcloud-upload-image/hcloud-upload-image",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "license": "MIT License",
     "scripts": {
         "build": "tsc"
@@ -15,6 +15,7 @@
     "pulumi": {
         "resource": true,
         "name": "hcloud-upload-image",
-        "version": "0.1.0"
+        "version": "0.0.1",
+        "server": "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image"
     }
 }
