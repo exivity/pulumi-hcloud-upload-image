@@ -53,7 +53,7 @@ namespace HcloudUploadImage.HcloudUploadImage
         {
             var dst = src ?? new global::Pulumi.InvokeOptions{};
             dst.Version = src?.Version ?? Version;
-            dst.PluginDownloadURL = src?.PluginDownloadURL ?? "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image";
+            dst.PluginDownloadURL = src?.PluginDownloadURL ?? "github://api.github.com/linuxluigi";
             return dst;
         }
 
@@ -61,7 +61,7 @@ namespace HcloudUploadImage.HcloudUploadImage
         {
             var dst = src ?? new global::Pulumi.InvokeOutputOptions{};
             dst.Version = src?.Version ?? Version;
-            dst.PluginDownloadURL = src?.PluginDownloadURL ?? "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image";
+            dst.PluginDownloadURL = src?.PluginDownloadURL ?? "github://api.github.com/linuxluigi";
             return dst;
         }
 

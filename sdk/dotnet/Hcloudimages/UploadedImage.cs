@@ -141,7 +141,7 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
-                PluginDownloadURL = "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image",
+                PluginDownloadURL = "github://api.github.com/linuxluigi",
                 AdditionalSecretOutputs =
                 {
                     "hcloudToken",

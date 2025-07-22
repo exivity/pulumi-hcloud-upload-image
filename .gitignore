@@ -7,6 +7,9 @@ bin/
 out/
 .env
 
+# goreleaser
+dist/
+
 ##########
 # Golang #
 ##########

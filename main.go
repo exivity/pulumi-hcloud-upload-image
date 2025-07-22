@@ -15,7 +15,7 @@ func main() {
 	p, err := infer.NewProviderBuilder().
 		WithNamespace("hcloud-upload-image").
 		WithDescription("A Pulumi provider for uploading custom images to Hetzner Cloud using https://github.com/apricote/hcloud-upload-image").
-		WithPluginDownloadURL(fmt.Sprintf("https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/%s/pulumi-resource-hcloud-upload-image", version)).
+		WithPluginDownloadURL("github://api.github.com/linuxluigi").
 		WithGoImportPath("github.com/linuxluigi/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image").
 		WithLicense("MIT License").
 		WithResources(

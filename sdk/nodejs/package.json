@@ -16,6 +16,6 @@
         "resource": true,
         "name": "hcloud-upload-image",
         "version": "0.0.1",
-        "server": "https://github.com/linuxluigi/pulumi-hcloud-upload-image/releases/download/v0.0.1/pulumi-resource-hcloud-upload-image"
+        "server": "github://api.github.com/linuxluigi"
     }
 }

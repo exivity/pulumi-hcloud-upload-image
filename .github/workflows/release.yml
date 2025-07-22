@@ -1,0 +1,33 @@
+# .github/workflows/release.yml
+name: goreleaser
+
+on:
+  pull_request:
+  push:
+    # run only against tags
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ./go.mod
+      - name: Create a release snapshot
+        if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
+        run: make release-snapshot
+
+      - name: Create a release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: make release

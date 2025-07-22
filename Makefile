@@ -1,6 +1,8 @@
 SHELL=/bin/bash -e -o pipefail
 PWD = $(shell pwd)
 
+GORELEASER_VERSION ?= v2.11.0
+
 out:
 	@mkdir -p out/build
 
@@ -67,8 +69,18 @@ set-version: ## Sets a new version (usage: make set-version VERSION=v1.0.0)
 	@echo "$(VERSION)" > version
 	@echo "Version set to $(VERSION)"
 
+release: clean ## Creates a release using GoReleaser
+	@VERSION=$$(cat version 2>/dev/null || echo "dev"); \
+	git tag $$VERSION || true; \
+	git push origin $$VERSION || true; \
+	VERSION=GORELEASER_VERSION curl -sfL https://goreleaser.com/static/run | bash -s -- release --clean
+
+release-snapshot: clean ## Creates a snapshot release using GoReleaser
+	@VERSION=$$(cat version 2>/dev/null || echo "dev"); \
+	VERSION=GORELEASER_VERSION GORELEASER_CURRENT_TAG=$$VERSION curl -sfL https://goreleaser.com/static/run | bash -s -- release --snapshot --clean
+
 clean: ## Cleans up everything
-	@rm -rf bin out
+	@rm -rf bin out dist
 
 help: ## Shows the help
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'
