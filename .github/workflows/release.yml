@@ -2,11 +2,7 @@
 name: goreleaser
 
 on:
-  pull_request:
-  push:
-    # run only against tags
-    tags:
-      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,10 +20,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: ./go.mod
-      - name: Create a release snapshot
-        if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
-        run: make release-snapshot
-
       - name: Create a release
-        if: startsWith(github.ref, 'refs/tags/v')
         run: make release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
