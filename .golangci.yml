@@ -35,7 +35,7 @@ linters:
         main:
           allow:
             - $gostd
-            - github.com/linuxluigi/pulumi-hcloud-upload-image
+            - github.com/exivity/pulumi-hcloud-upload-image
             - github.com/pulumi/pulumi-go-provider/infer
             - github.com/pulumi/pulumi-go-provider
             - github.com/hetznercloud/hcloud-go/v2/hcloud

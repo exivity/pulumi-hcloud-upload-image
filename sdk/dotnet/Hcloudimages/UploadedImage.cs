@@ -141,7 +141,7 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
-                PluginDownloadURL = "github://api.github.com/linuxluigi",
+                PluginDownloadURL = "github://api.github.com/exivity",
                 AdditionalSecretOutputs =
                 {
                     "hcloudToken",

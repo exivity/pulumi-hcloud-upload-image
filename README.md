@@ -55,7 +55,7 @@ import (
     "time"
 
     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-    "github.com/linuxluigi/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image/hcloudimages"
+    "github.com/exivity/pulumi-hcloud-upload-image/sdk/go/pulumi-hcloud-upload-image/hcloudimages"
 )
 
 func main() {
@@ -89,7 +89,7 @@ func main() {
 
 ```typescript
 import * as pulumi from "@pulumi/pulumi";
-import * as hcloud from "@linuxluigi/pulumi-hcloud-upload-image";
+import * as hcloud from "@exivity/pulumi-hcloud-upload-image";
 
 const snapshot = new hcloud.hcloudimages.UploadedImage("my-image", {
     description: `Custom image - ${new Date().toISOString()}`,
