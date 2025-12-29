@@ -22,6 +22,7 @@ var (
 	ErrUnsupportedImageFormat  = errors.New("unsupported image format")
 	ErrUnsupportedArchitecture = errors.New("unsupported architecture")
 	ErrServerTypeNotFound      = errors.New("server type not found")
+	ErrLocationNotFound        = errors.New("location not found")
 )
 
 // UploadedImage represents a Pulumi resource for uploading custom images to Hetzner Cloud
@@ -50,6 +51,9 @@ type UploadedImageArgs struct {
 	// ServerType can be optionally set to override the default server type
 	ServerType *string `pulumi:"serverType,optional"`
 
+	// Location can be optionally set to define the location where the temporary server is created
+	Location *string `pulumi:"location,optional"`
+
 	// Description is an optional description for the resulting image
 	Description *string `pulumi:"description,optional"`
 
@@ -65,6 +69,7 @@ func (args *UploadedImageArgs) Annotate(a infer.Annotator) {
 	a.Describe(&args.ImageSize, "Optional size validation for the image in bytes.")
 	a.Describe(&args.Architecture, "The architecture of the image. Supported: 'x86', 'arm'.")
 	a.Describe(&args.ServerType, "Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.")
+	a.Describe(&args.Location, "Optional location to use for the temporary server. Defaults to 'fsn1'.")
 	a.Describe(&args.Description, "Optional description for the resulting image.")
 	a.Describe(&args.Labels, "Labels to add to the resulting image. These can be used to filter images later.")
 
@@ -200,6 +205,18 @@ func (UploadedImage) Create( //nolint:cyclop,funlen // TODO: refactor this funct
 			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrServerTypeNotFound, *inputs.ServerType)
 		}
 		uploadOpts.ServerType = serverType
+	}
+
+	// Set location if specified
+	if inputs.Location != nil {
+		location, _, err := hcloudClient.Location.GetByName(ctx, *inputs.Location)
+		if err != nil {
+			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("failed to get location: %w", err)
+		}
+		if location == nil {
+			return infer.CreateResponse[UploadedImageState]{}, fmt.Errorf("%w: %s", ErrLocationNotFound, *inputs.Location)
+		}
+		uploadOpts.Location = location
 	}
 
 	// Set description
@@ -356,7 +373,7 @@ func (UploadedImage) Update(
 }
 
 // Diff determines what changes are needed
-func (UploadedImage) Diff(
+func (UploadedImage) Diff( //nolint:cyclop // TODO: refactor this function
 	ctx context.Context, req infer.DiffRequest[UploadedImageArgs, UploadedImageState],
 ) (infer.DiffResponse, error) {
 	diff := map[string]p.PropertyDiff{}
@@ -385,6 +402,9 @@ func (UploadedImage) Diff(
 	}
 	if stringPtrNotEqual(req.Inputs.ServerType, req.State.ServerType) {
 		diff["serverType"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if stringPtrNotEqual(req.Inputs.Location, req.State.Location) {
+		diff["location"] = p.PropertyDiff{Kind: p.Update}
 	}
 
 	// Labels and description can be updated in place

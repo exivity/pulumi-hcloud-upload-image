@@ -89,6 +89,12 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
         public Output<ImmutableDictionary<string, string>?> Labels { get; private set; } = null!;
 
         /// <summary>
+        /// Optional location to use for the temporary server. Defaults to 'fsn1'.
+        /// </summary>
+        [Output("location")]
+        public Output<string?> Location { get; private set; } = null!;
+
+        /// <summary>
         /// The OS flavor of the image.
         /// </summary>
         [Output("osFlavor")]
@@ -231,6 +237,12 @@ namespace HcloudUploadImage.HcloudUploadImage.Hcloudimages
             get => _labels ?? (_labels = new InputMap<string>());
             set => _labels = value;
         }
+
+        /// <summary>
+        /// Optional location to use for the temporary server. Defaults to 'fsn1'.
+        /// </summary>
+        [Input("location")]
+        public Input<string>? Location { get; set; }
 
         /// <summary>
         /// Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.

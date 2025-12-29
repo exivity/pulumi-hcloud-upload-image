@@ -40,6 +40,8 @@ type UploadedImage struct {
 	ImageUrl pulumi.StringPtrOutput `pulumi:"imageUrl"`
 	// Labels to add to the resulting image. These can be used to filter images later.
 	Labels pulumi.StringMapOutput `pulumi:"labels"`
+	// Optional location to use for the temporary server. Defaults to 'fsn1'.
+	Location pulumi.StringPtrOutput `pulumi:"location"`
 	// The OS flavor of the image.
 	OsFlavor pulumi.StringOutput `pulumi:"osFlavor"`
 	// The OS version of the image.
@@ -127,6 +129,8 @@ type uploadedImageArgs struct {
 	ImageUrl *string `pulumi:"imageUrl"`
 	// Labels to add to the resulting image. These can be used to filter images later.
 	Labels map[string]string `pulumi:"labels"`
+	// Optional location to use for the temporary server. Defaults to 'fsn1'.
+	Location *string `pulumi:"location"`
 	// Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
 	ServerType *string `pulumi:"serverType"`
 }
@@ -149,6 +153,8 @@ type UploadedImageArgs struct {
 	ImageUrl pulumi.StringPtrInput
 	// Labels to add to the resulting image. These can be used to filter images later.
 	Labels pulumi.StringMapInput
+	// Optional location to use for the temporary server. Defaults to 'fsn1'.
+	Location pulumi.StringPtrInput
 	// Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
 	ServerType pulumi.StringPtrInput
 }
@@ -298,6 +304,11 @@ func (o UploadedImageOutput) ImageUrl() pulumi.StringPtrOutput {
 // Labels to add to the resulting image. These can be used to filter images later.
 func (o UploadedImageOutput) Labels() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *UploadedImage) pulumi.StringMapOutput { return v.Labels }).(pulumi.StringMapOutput)
+}
+
+// Optional location to use for the temporary server. Defaults to 'fsn1'.
+func (o UploadedImageOutput) Location() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *UploadedImage) pulumi.StringPtrOutput { return v.Location }).(pulumi.StringPtrOutput)
 }
 
 // The OS flavor of the image.

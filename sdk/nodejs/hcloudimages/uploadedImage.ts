@@ -37,71 +37,75 @@ export class UploadedImage extends pulumi.CustomResource {
     /**
      * The architecture of the image. Supported: 'x86', 'arm'.
      */
-    public readonly architecture!: pulumi.Output<string>;
+    declare public readonly architecture: pulumi.Output<string>;
     /**
      * The creation timestamp of the image.
      */
-    public /*out*/ readonly created!: pulumi.Output<string>;
+    declare public /*out*/ readonly created: pulumi.Output<string>;
     /**
      * Optional description for the resulting image.
      */
-    public readonly description!: pulumi.Output<string | undefined>;
+    declare public readonly description: pulumi.Output<string | undefined>;
     /**
      * The disk size of the image in GB.
      */
-    public /*out*/ readonly diskSize!: pulumi.Output<number>;
+    declare public /*out*/ readonly diskSize: pulumi.Output<number>;
     /**
      * The Hetzner Cloud API token.
      */
-    public readonly hcloudToken!: pulumi.Output<string>;
+    declare public readonly hcloudToken: pulumi.Output<string>;
     /**
      * The compression format of the image. Supported: 'none', 'bz2', 'xz'. Defaults to 'none'.
      */
-    public readonly imageCompression!: pulumi.Output<string | undefined>;
+    declare public readonly imageCompression: pulumi.Output<string | undefined>;
     /**
      * The format of the image. Supported: 'raw', 'qcow2'. Defaults to 'raw'.
      */
-    public readonly imageFormat!: pulumi.Output<string | undefined>;
+    declare public readonly imageFormat: pulumi.Output<string | undefined>;
     /**
      * The ID of the created Hetzner Cloud image.
      */
-    public /*out*/ readonly imageId!: pulumi.Output<number>;
+    declare public /*out*/ readonly imageId: pulumi.Output<number>;
     /**
      * The name of the created image.
      */
-    public /*out*/ readonly imageName!: pulumi.Output<string>;
+    declare public /*out*/ readonly imageName: pulumi.Output<string>;
     /**
      * Optional size validation for the image in bytes.
      */
-    public readonly imageSize!: pulumi.Output<number | undefined>;
+    declare public readonly imageSize: pulumi.Output<number | undefined>;
     /**
      * The URL to download the image from. Must be publicly accessible.
      */
-    public readonly imageUrl!: pulumi.Output<string | undefined>;
+    declare public readonly imageUrl: pulumi.Output<string | undefined>;
     /**
      * Labels to add to the resulting image. These can be used to filter images later.
      */
-    public readonly labels!: pulumi.Output<{[key: string]: string} | undefined>;
+    declare public readonly labels: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Optional location to use for the temporary server. Defaults to 'fsn1'.
+     */
+    declare public readonly location: pulumi.Output<string | undefined>;
     /**
      * The OS flavor of the image.
      */
-    public /*out*/ readonly osFlavor!: pulumi.Output<string>;
+    declare public /*out*/ readonly osFlavor: pulumi.Output<string>;
     /**
      * The OS version of the image.
      */
-    public /*out*/ readonly osVersion!: pulumi.Output<string>;
+    declare public /*out*/ readonly osVersion: pulumi.Output<string>;
     /**
      * Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
      */
-    public readonly serverType!: pulumi.Output<string | undefined>;
+    declare public readonly serverType: pulumi.Output<string | undefined>;
     /**
      * The current status of the image.
      */
-    public /*out*/ readonly status!: pulumi.Output<string>;
+    declare public /*out*/ readonly status: pulumi.Output<string>;
     /**
      * The type of the image.
      */
-    public /*out*/ readonly type!: pulumi.Output<string>;
+    declare public /*out*/ readonly type: pulumi.Output<string>;
 
     /**
      * Create a UploadedImage resource with the given unique name, arguments, and options.
@@ -114,21 +118,22 @@ export class UploadedImage extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.architecture === undefined) && !opts.urn) {
+            if (args?.architecture === undefined && !opts.urn) {
                 throw new Error("Missing required property 'architecture'");
             }
-            if ((!args || args.hcloudToken === undefined) && !opts.urn) {
+            if (args?.hcloudToken === undefined && !opts.urn) {
                 throw new Error("Missing required property 'hcloudToken'");
             }
-            resourceInputs["architecture"] = args ? args.architecture : undefined;
-            resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["architecture"] = args?.architecture;
+            resourceInputs["description"] = args?.description;
             resourceInputs["hcloudToken"] = args?.hcloudToken ? pulumi.secret(args.hcloudToken) : undefined;
-            resourceInputs["imageCompression"] = (args ? args.imageCompression : undefined) ?? "none";
-            resourceInputs["imageFormat"] = (args ? args.imageFormat : undefined) ?? "raw";
-            resourceInputs["imageSize"] = args ? args.imageSize : undefined;
-            resourceInputs["imageUrl"] = args ? args.imageUrl : undefined;
-            resourceInputs["labels"] = args ? args.labels : undefined;
-            resourceInputs["serverType"] = args ? args.serverType : undefined;
+            resourceInputs["imageCompression"] = (args?.imageCompression) ?? "none";
+            resourceInputs["imageFormat"] = (args?.imageFormat) ?? "raw";
+            resourceInputs["imageSize"] = args?.imageSize;
+            resourceInputs["imageUrl"] = args?.imageUrl;
+            resourceInputs["labels"] = args?.labels;
+            resourceInputs["location"] = args?.location;
+            resourceInputs["serverType"] = args?.serverType;
             resourceInputs["created"] = undefined /*out*/;
             resourceInputs["diskSize"] = undefined /*out*/;
             resourceInputs["imageId"] = undefined /*out*/;
@@ -150,6 +155,7 @@ export class UploadedImage extends pulumi.CustomResource {
             resourceInputs["imageSize"] = undefined /*out*/;
             resourceInputs["imageUrl"] = undefined /*out*/;
             resourceInputs["labels"] = undefined /*out*/;
+            resourceInputs["location"] = undefined /*out*/;
             resourceInputs["osFlavor"] = undefined /*out*/;
             resourceInputs["osVersion"] = undefined /*out*/;
             resourceInputs["serverType"] = undefined /*out*/;
@@ -199,6 +205,10 @@ export interface UploadedImageArgs {
      * Labels to add to the resulting image. These can be used to filter images later.
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Optional location to use for the temporary server. Defaults to 'fsn1'.
+     */
+    location?: pulumi.Input<string>;
     /**
      * Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
      */
