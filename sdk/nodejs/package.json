@@ -1,6 +1,6 @@
 {
     "name": "@hcloud-upload-image/hcloud-upload-image",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "license": "MIT License",
     "scripts": {
         "build": "tsc"
@@ -15,7 +15,7 @@
     "pulumi": {
         "resource": true,
         "name": "hcloud-upload-image",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "server": "github://api.github.com/exivity"
     }
 }

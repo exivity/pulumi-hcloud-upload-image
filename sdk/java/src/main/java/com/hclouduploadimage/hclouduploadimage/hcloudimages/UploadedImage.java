@@ -191,6 +191,20 @@ public class UploadedImage extends com.pulumi.resources.CustomResource {
         return Codegen.optional(this.labels);
     }
     /**
+     * Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+     * 
+     */
+    @Export(name="location", refs={String.class}, tree="[0]")
+    private Output</* @Nullable */ String> location;
+
+    /**
+     * @return Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+     * 
+     */
+    public Output<Optional<String>> location() {
+        return Codegen.optional(this.location);
+    }
+    /**
      * The OS flavor of the image.
      * 
      */

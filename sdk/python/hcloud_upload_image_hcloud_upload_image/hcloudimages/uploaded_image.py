@@ -27,6 +27,7 @@ class UploadedImageArgs:
                  image_size: Optional[pulumi.Input[_builtins.int]] = None,
                  image_url: Optional[pulumi.Input[_builtins.str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 location: Optional[pulumi.Input[_builtins.str]] = None,
                  server_type: Optional[pulumi.Input[_builtins.str]] = None):
         """
         The set of arguments for constructing a UploadedImage resource.
@@ -38,6 +39,7 @@ class UploadedImageArgs:
         :param pulumi.Input[_builtins.int] image_size: Optional size validation for the image in bytes.
         :param pulumi.Input[_builtins.str] image_url: The URL to download the image from. Must be publicly accessible.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] labels: Labels to add to the resulting image. These can be used to filter images later.
+        :param pulumi.Input[_builtins.str] location: Optional location to use for the temporary server. Defaults to 'fsn1'.
         :param pulumi.Input[_builtins.str] server_type: Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
         """
         pulumi.set(__self__, "architecture", architecture)
@@ -58,6 +60,8 @@ class UploadedImageArgs:
             pulumi.set(__self__, "image_url", image_url)
         if labels is not None:
             pulumi.set(__self__, "labels", labels)
+        if location is not None:
+            pulumi.set(__self__, "location", location)
         if server_type is not None:
             pulumi.set(__self__, "server_type", server_type)
 
@@ -158,6 +162,18 @@ class UploadedImageArgs:
         pulumi.set(self, "labels", value)
 
     @_builtins.property
+    @pulumi.getter
+    def location(self) -> Optional[pulumi.Input[_builtins.str]]:
+        """
+        Optional location to use for the temporary server. Defaults to 'fsn1'.
+        """
+        return pulumi.get(self, "location")
+
+    @location.setter
+    def location(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "location", value)
+
+    @_builtins.property
     @pulumi.getter(name="serverType")
     def server_type(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
@@ -184,6 +200,7 @@ class UploadedImage(pulumi.CustomResource):
                  image_size: Optional[pulumi.Input[_builtins.int]] = None,
                  image_url: Optional[pulumi.Input[_builtins.str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 location: Optional[pulumi.Input[_builtins.str]] = None,
                  server_type: Optional[pulumi.Input[_builtins.str]] = None,
                  __props__=None):
         """
@@ -199,6 +216,7 @@ class UploadedImage(pulumi.CustomResource):
         :param pulumi.Input[_builtins.int] image_size: Optional size validation for the image in bytes.
         :param pulumi.Input[_builtins.str] image_url: The URL to download the image from. Must be publicly accessible.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] labels: Labels to add to the resulting image. These can be used to filter images later.
+        :param pulumi.Input[_builtins.str] location: Optional location to use for the temporary server. Defaults to 'fsn1'.
         :param pulumi.Input[_builtins.str] server_type: Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
         """
         ...
@@ -233,6 +251,7 @@ class UploadedImage(pulumi.CustomResource):
                  image_size: Optional[pulumi.Input[_builtins.int]] = None,
                  image_url: Optional[pulumi.Input[_builtins.str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 location: Optional[pulumi.Input[_builtins.str]] = None,
                  server_type: Optional[pulumi.Input[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -259,6 +278,7 @@ class UploadedImage(pulumi.CustomResource):
             __props__.__dict__["image_size"] = image_size
             __props__.__dict__["image_url"] = image_url
             __props__.__dict__["labels"] = labels
+            __props__.__dict__["location"] = location
             __props__.__dict__["server_type"] = server_type
             __props__.__dict__["created"] = None
             __props__.__dict__["disk_size"] = None
@@ -304,6 +324,7 @@ class UploadedImage(pulumi.CustomResource):
         __props__.__dict__["image_size"] = None
         __props__.__dict__["image_url"] = None
         __props__.__dict__["labels"] = None
+        __props__.__dict__["location"] = None
         __props__.__dict__["os_flavor"] = None
         __props__.__dict__["os_version"] = None
         __props__.__dict__["server_type"] = None
@@ -406,6 +427,14 @@ class UploadedImage(pulumi.CustomResource):
         Labels to add to the resulting image. These can be used to filter images later.
         """
         return pulumi.get(self, "labels")
+
+    @_builtins.property
+    @pulumi.getter
+    def location(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        Optional location to use for the temporary server. Defaults to 'fsn1'.
+        """
+        return pulumi.get(self, "location")
 
     @_builtins.property
     @pulumi.getter(name="osFlavor")

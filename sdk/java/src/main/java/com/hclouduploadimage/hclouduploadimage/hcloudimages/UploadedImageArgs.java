@@ -140,6 +140,21 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
     }
 
     /**
+     * Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+     * 
+     */
+    @Import(name="location")
+    private @Nullable Output<String> location;
+
+    /**
+     * @return Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+     * 
+     */
+    public Optional<Output<String>> location() {
+        return Optional.ofNullable(this.location);
+    }
+
+    /**
      * Optional server type to use for the temporary server. If not specified, a default will be chosen based on architecture.
      * 
      */
@@ -165,6 +180,7 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
         this.imageSize = $.imageSize;
         this.imageUrl = $.imageUrl;
         this.labels = $.labels;
+        this.location = $.location;
         this.serverType = $.serverType;
     }
 
@@ -352,6 +368,27 @@ public final class UploadedImageArgs extends com.pulumi.resources.ResourceArgs {
          */
         public Builder labels(Map<String,String> labels) {
             return labels(Output.of(labels));
+        }
+
+        /**
+         * @param location Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+         * 
+         * @return builder
+         * 
+         */
+        public Builder location(@Nullable Output<String> location) {
+            $.location = location;
+            return this;
+        }
+
+        /**
+         * @param location Optional location to use for the temporary server. Defaults to &#39;fsn1&#39;.
+         * 
+         * @return builder
+         * 
+         */
+        public Builder location(String location) {
+            return location(Output.of(location));
         }
 
         /**
