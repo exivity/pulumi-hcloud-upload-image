@@ -3,7 +3,7 @@ module github.com/exivity/pulumi-hcloud-upload-image
 go 1.24.5
 
 require (
-	github.com/apricote/hcloud-upload-image/hcloudimages v1.2.0
+	github.com/apricote/hcloud-upload-image/hcloudimages v1.3.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/hetznercloud/hcloud-go/v2 v2.33.0
 	github.com/pulumi/pulumi-go-provider v1.2.0
