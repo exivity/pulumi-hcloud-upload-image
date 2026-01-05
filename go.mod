@@ -9,7 +9,7 @@ require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/hetznercloud/hcloud-go/v2 v2.33.0
 	github.com/pulumi/pulumi-go-provider v1.2.0
-	github.com/pulumi/pulumi/sdk/v3 v3.213.0
+	github.com/pulumi/pulumi/sdk/v3 v3.214.1
 )
 
 require (
