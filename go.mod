@@ -7,7 +7,7 @@ tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint
 require (
 	github.com/apricote/hcloud-upload-image/hcloudimages v1.3.0
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/hetznercloud/hcloud-go/v2 v2.33.0
+	github.com/hetznercloud/hcloud-go/v2 v2.34.0
 	github.com/pulumi/pulumi-go-provider v1.2.0
 	github.com/pulumi/pulumi/sdk/v3 v3.213.0
 )
@@ -269,13 +269,13 @@ require (
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251023183803-a4bb9ffd2546 // indirect
-	golang.org/x/mod v0.30.0 // indirect
+	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/term v0.38.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
-	golang.org/x/tools v0.39.0 // indirect
+	golang.org/x/tools v0.40.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250818200422-3122310a409c // indirect
 	google.golang.org/grpc v1.75.0 // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
