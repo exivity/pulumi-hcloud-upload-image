@@ -8,8 +8,8 @@ require (
 	github.com/apricote/hcloud-upload-image/hcloudimages v1.3.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/hetznercloud/hcloud-go/v2 v2.36.0
-	github.com/pulumi/pulumi-go-provider v1.2.0
-	github.com/pulumi/pulumi/sdk/v3 v3.213.0
+	github.com/pulumi/pulumi-go-provider v1.3.0
+	github.com/pulumi/pulumi/sdk/v3 v3.217.0
 )
 
 require (
@@ -187,6 +187,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pgavlin/fx v0.1.6 // indirect
+	github.com/pgavlin/fx/v2 v2.0.10 // indirect
 	github.com/pgavlin/goldmark v1.1.33-0.20200616210433-b5eb04559386 // indirect
 	github.com/pjbgf/sha1cd v0.3.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -198,8 +199,8 @@ require (
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/pulumi/appdash v0.0.0-20231130102222-75f619a67231 // indirect
-	github.com/pulumi/esc v0.17.0 // indirect
-	github.com/pulumi/pulumi/pkg/v3 v3.213.0 // indirect
+	github.com/pulumi/esc v0.21.0 // indirect
+	github.com/pulumi/pulumi/pkg/v3 v3.217.0 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.5 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.23 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -267,7 +268,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.47.0 // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
